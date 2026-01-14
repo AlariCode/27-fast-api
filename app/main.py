@@ -1,5 +1,5 @@
 from random import random
-from fastapi import FastAPI, Response, HTTPException
+from fastapi import FastAPI, Path, Response, HTTPException
 from fastapi.responses import JSONResponse, PlainTextResponse, HTMLResponse
 
 app = FastAPI()
@@ -10,7 +10,6 @@ class UnauthHTTPException(HTTPException):
         super().__init__(401, "Не авторизиован")
 
 
-@app.get("/")
-def root():
-    num = random()
-    return {"score": num}
+@app.get("/posts/{post_id}")
+def get_post(post_id: int):
+    return {"id": post_id}
