@@ -1,5 +1,6 @@
 from random import random
 from fastapi import FastAPI, Response, HTTPException
+from fastapi.responses import JSONResponse, PlainTextResponse, HTMLResponse
 
 app = FastAPI()
 
@@ -10,9 +11,6 @@ class UnauthHTTPException(HTTPException):
 
 
 @app.get("/")
-def root(response: Response):
+def root():
     num = random()
-    if num > 0.5:
-        raise UnauthHTTPException()
-    response.status_code = 201
-    return {"Score": num}
+    return {"score": num}
