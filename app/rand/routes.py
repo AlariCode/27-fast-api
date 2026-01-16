@@ -2,7 +2,9 @@
 # в этом диапазоне
 
 import random
-from fastapi import APIRouter, HTTPException
+from fastapi import APIRouter, Depends, HTTPException
+
+from .schema import RandQuery
 
 
 router = APIRouter(
@@ -11,12 +13,9 @@ router = APIRouter(
 
 
 @router.get("/")
-def get_random(
-    rnd_from: int = 0,
-    rnd_to: int = 100
-):
-    if rnd_from > rnd_to:
+def get_random(query: RandQuery = Depends()):
+    if query.rnd_from > query.rnd_to:
         raise HTTPException(400, "rnd_from должно быть <= rnd_to")
     return {
-        "value": random.randint(rnd_from, rnd_to)
+        "value": random.randint(query.rnd_from, query.rnd_to)
     }
