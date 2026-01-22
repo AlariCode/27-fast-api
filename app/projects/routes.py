@@ -15,6 +15,7 @@ router = APIRouter(
 async def create_project(data: ProjectCreateRequest):
     # создали проект
     # return {**data.model_dump(), "id": 1}
+    print(data)
     return ProjectCreateResponse(
         id=1,
         name=data.name

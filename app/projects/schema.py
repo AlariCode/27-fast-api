@@ -7,6 +7,10 @@ class ProjectCreateRequest(BaseModel):
     name: str
     description: str | None = None
 
+    model_config = {
+        "extra": "forbid"
+    }
+
     @field_validator("key")
     @classmethod
     def key_not_empty(cls, value):
