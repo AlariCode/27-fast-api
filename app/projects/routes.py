@@ -18,7 +18,7 @@ def get_project(
     return {"id": path.project_id}
 
 
-@router.patch("/{project_id}")
+@router.patch("/{project_id}", response_model=ProjectUpdateResponse)
 def update_project(
     data: ProjectUpdateRequest,
     path: ProjectPath = Depends()
