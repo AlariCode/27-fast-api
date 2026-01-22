@@ -1,5 +1,9 @@
 from fastapi import HTTPException
-from pydantic import BaseModel, field_validator
+from pydantic import BaseModel, Field, field_validator
+
+
+class ProjectPath(BaseModel):
+    project_id: int = Field(gt=0)
 
 
 class ProjectCreateRequest(BaseModel):
