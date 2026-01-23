@@ -6,6 +6,10 @@ class ProjectPath(BaseModel):
     project_id: int = Field(gt=0)
 
 
+class ProjectGetResponse(BaseModel):
+    id: int
+
+
 class ProjectUpdateRequest(BaseModel):
     name: str | None = None
     description: str | None = None
@@ -23,9 +27,7 @@ class ProjectCreateRequest(BaseModel):
     name: str
     description: str | None = None
 
-    model_config = {
-        "extra": "forbid"
-    }
+    model_config = {"extra": "forbid"}
 
     @field_validator("key")
     @classmethod
