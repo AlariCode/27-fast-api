@@ -13,7 +13,7 @@ from .schema import (
 )
 
 
-router = APIRouter(prefix="/projects", tags=["Projects"])
+router = APIRouter(prefix="/v1/projects", tags=["Projects"])
 
 
 @router.get("/{project_id}", response_model=ProjectGetResponse, description="""
