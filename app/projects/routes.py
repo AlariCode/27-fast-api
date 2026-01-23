@@ -13,10 +13,12 @@ from .schema import (
 )
 
 
-router = APIRouter(prefix="/projects")
+router = APIRouter(prefix="/projects", tags=["Projects"])
 
 
-@router.get("/{project_id}", response_model=ProjectGetResponse)
+@router.get("/{project_id}", response_model=ProjectGetResponse, description="""
+    Получает проект по его id, если проекта нет, возвращает ошибку.
+            """)
 def get_project(path: ProjectPath = Depends()):
     return ProjectGetResponse(id=path.project_id)
 
