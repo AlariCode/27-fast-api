@@ -1,7 +1,6 @@
-# GET Query rnd_from и rnd_to, возвращающий случайный int
-# в этом диапазоне
-
 from fastapi import APIRouter, Depends
+
+from .service import ProjectService
 
 from .schema import (
     ProjectCreateRequest,
