@@ -1,6 +1,6 @@
 from fastapi import APIRouter, Depends
 
-from .service import ProjectService
+from .service import ProjectServiceDeps
 
 from .schema import (
     ProjectCreateRequest,
@@ -15,11 +15,19 @@ from .schema import (
 router = APIRouter(prefix="/v1/projects", tags=["Projects"])
 
 
-@router.get("/{project_id}", response_model=ProjectGetResponse, description="""
+@router.get(
+    "/{project_id}",
+    response_model=ProjectGetResponse,
+    description="""
     Получает проект по его id, если проекта нет, возвращает ошибку.
-            """)
-def get_project(path: ProjectPath = Depends()):
-    return ProjectGetResponse(id=path.project_id)
+            """,
+)
+def get_project(
+    service: ProjectServiceDeps,
+    path: ProjectPath = Depends(),
+):
+    res = service.get_project(path.project_id)
+    return ProjectGetResponse(id=res)
 
 
 @router.patch("/{project_id}", response_model=ProjectUpdateResponse)
