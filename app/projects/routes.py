@@ -1,7 +1,5 @@
 from fastapi import APIRouter, Depends
 
-from .repository import ProjectRepositoryDeps
-
 from .service import ProjectServiceDeps
 
 from .schema import (
