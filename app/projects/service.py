@@ -6,7 +6,6 @@ from .repository import ProjectRepository, ProjectRepositoryDeps
 
 
 def get_project_service(repo: ProjectRepositoryDeps):
-    print("get_project_service")
     return ProjectService(repo)
 
 

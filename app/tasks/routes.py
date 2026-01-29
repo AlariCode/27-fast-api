@@ -1,5 +1,7 @@
 from fastapi import APIRouter, Depends
 
+from .service import TaskServiceDeps
+
 from .schema import TaskGetResponse, TaskPath
 
 
@@ -14,6 +16,8 @@ router = APIRouter(prefix="/v1/tasks", tags=["Tasks"])
             """,
 )
 def get_task(
+    service: TaskServiceDeps,
     path: TaskPath = Depends(),
 ):
-    return TaskGetResponse(id=path.task_id)
+    res = service.get(path.task_id)
+    return TaskGetResponse(id=res)
