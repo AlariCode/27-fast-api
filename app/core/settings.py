@@ -1,7 +1,8 @@
 
 from typing import Annotated
+from urllib.parse import urlparse
 from fastapi import Depends, Request
-from pydantic import BaseModel, Field
+from pydantic import BaseModel, field_validator
 from pydantic_settings import BaseSettings, SettingsConfigDict
 
 
@@ -21,7 +22,7 @@ class Settings(BaseSettings):
         extra="ignore"
     )
 
-    databese_url: str = Field(validation_alias="DATABASE_URL")
+    database_url: str
 
     @property
     def app(self) -> AppSettings:
@@ -29,7 +30,28 @@ class Settings(BaseSettings):
 
     @property
     def db(self) -> DatabaseSettings:
-        return DatabaseSettings(url=self.databese_url)
+        return DatabaseSettings(url=self.database_url)
+
+    @field_validator("database_url")
+    @classmethod
+    def validate_database_url(cls, v: str) -> str:
+        parsed = urlparse(v)
+
+        if parsed.scheme not in {"postgresql", "postgresql+asyncpg"}:
+            raise ValueError(
+                "database_url scheme must be postgresql or ostgresql+asyncpg")
+
+        if not parsed.hostname:
+            raise ValueError("database_url must include hostname")
+
+        dbname = (parsed.path or "").lstrip("/")
+        if not dbname:
+            raise ValueError("database_url must include database")
+
+        if parsed.port is not None and not (1 <= parsed.port <= 65535):
+            raise ValueError("database_url port must be 1..65535")
+
+        return v
 
 
 def get_settings(request: Request) -> Settings:
