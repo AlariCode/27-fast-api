@@ -1,4 +1,6 @@
 
+from typing import Annotated
+from fastapi import Depends
 from pydantic import BaseModel, Field
 from pydantic_settings import BaseSettings, SettingsConfigDict
 
@@ -28,3 +30,13 @@ class Settings(BaseSettings):
     @property
     def db(self) -> DatabaseSettings:
         return DatabaseSettings(url=self.databese_url)
+
+
+def get_settings() -> Settings:
+    return Settings()  # type: ignore[call-arg]
+
+
+SettingsDeps = Annotated[
+    Settings,
+    Depends(get_settings)
+]
