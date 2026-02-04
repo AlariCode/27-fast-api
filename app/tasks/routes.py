@@ -24,4 +24,5 @@ def get_task(
 ):
     res = service.get(path.task_id)
     print(settings.db.url)
+    print(settings.auth.jwt_secret)
     return TaskGetResponse(id=res)

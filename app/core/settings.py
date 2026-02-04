@@ -15,6 +15,10 @@ class DatabaseSettings(BaseModel):
     url: str
 
 
+class AuthSettings(BaseModel):
+    jwt_secret: str
+
+
 class Settings(BaseSettings):
     model_config = SettingsConfigDict(
         env_file=".env",
@@ -23,6 +27,7 @@ class Settings(BaseSettings):
     )
 
     database_url: str
+    jwt_secret: str
 
     @property
     def app(self) -> AppSettings:
@@ -31,6 +36,10 @@ class Settings(BaseSettings):
     @property
     def db(self) -> DatabaseSettings:
         return DatabaseSettings(url=self.database_url)
+
+    @property
+    def auth(self) -> AuthSettings:
+        return AuthSettings(jwt_secret=self.jwt_secret)
 
     @field_validator("database_url")
     @classmethod
