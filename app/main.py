@@ -1,5 +1,3 @@
-import logging
-import sys
 from fastapi import FastAPI
 from app.core.settings import Settings
 from app.projects.routes import router as project_router
