@@ -22,7 +22,5 @@ def get_task(
     path: TaskPath = Depends(),
 ):
     res = service.get(path.task_id)
-    # logger.warning(f"ID: {res}")
-    logger.warning("ID: %s", res)
-    logger.info("ID: %s", res)
+    logger.info("ID: %s", res, extra={"user_id": 1})
     return TaskGetResponse(id=res)
