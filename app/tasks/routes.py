@@ -1,5 +1,5 @@
 import logging
-from fastapi import APIRouter, Depends
+from fastapi import APIRouter, Depends, HTTPException
 
 from .service import TaskServiceDeps
 
@@ -22,5 +22,7 @@ def get_task(
     path: TaskPath = Depends(),
 ):
     res = service.get(path.task_id)
+    if not res:
+        raise HTTPException(500, "Ошибка чтения ID")
     logger.info("ID: %s", res, extra={"user_id": 1})
     return TaskGetResponse(id=res)
