@@ -1,7 +1,7 @@
 import logging
 from fastapi import APIRouter, Depends, HTTPException
 
-from app.core.db import check_db
+from app.core.db import DbSessionDeps, check_db
 
 from .service import TaskServiceDeps
 
@@ -21,9 +21,10 @@ logger = logging.getLogger(__name__)
 )
 async def get_task(
     service: TaskServiceDeps,
+    db_session: DbSessionDeps,
     path: TaskPath = Depends(),
 ):
-    data = await check_db()
+    data = await check_db(db_session)
     logger.info("DB check: %s", data)
     res = service.get(path.task_id)
     if not res:
