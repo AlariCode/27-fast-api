@@ -5,11 +5,11 @@ description = "Add your description here"
 readme = "README.md"
 requires-python = ">=3.12"
 dependencies = [
-    "fastapi[standard]>=0.127.0",
-    "pydantic[email]>=2.12.5",
+	"asyncpg>=0.31.0",
+	"fastapi[standard]>=0.127.0",
+	"pydantic[email]>=2.12.5",
+	"sqlalchemy[asyncio]>=2.0.46",
 ]
 
 [dependency-groups]
-dev = [
-    "ruff>=0.14.10",
-]
+dev = ["ruff>=0.14.10"]
