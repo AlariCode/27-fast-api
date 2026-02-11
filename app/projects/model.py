@@ -10,4 +10,4 @@ class Project(Base):
     key: Mapped[str] = mapped_column(
         String(64), unique=True, nullable=False, index=True)
     name: Mapped[str | None] = mapped_column(String(255), nullable=True)
-    desctiprion: Mapped[str | None] = mapped_column(Text, nullable=True)
+    description: Mapped[str | None] = mapped_column(Text, nullable=True)
