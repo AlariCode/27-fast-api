@@ -26,7 +26,7 @@ def get_project(
     service: ProjectServiceDeps,
     path: ProjectPath = Depends(),
 ):
-    res = service.get_project(path.project_id)
+    res = service.get(path.project_id)
     return ProjectGetResponse(id=res)
 
 
@@ -39,5 +39,6 @@ def update_project(data: ProjectUpdateRequest, path: ProjectPath = Depends()):
 
 
 @router.post("/", response_model=ProjectCreateResponse, status_code=201)
-async def create_project(data: ProjectCreateRequest):
+async def create_project(service: ProjectServiceDeps, data: ProjectCreateRequest):
+    res = await service.create()
     return ProjectCreateResponse(id=1, name=data.name)

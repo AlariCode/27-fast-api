@@ -1,24 +1,37 @@
+import logging
 from typing import Annotated
 
 from fastapi import Depends
 
-from .db import DbSessionDeps
+from app.core.db import DbSessionDeps
+from app.projects.model import Project
+logger = logging.getLogger(__name__)
 
 
 class ProjectRepository():
+    def __init__(self, session: DbSessionDeps):
+        self.session = session
+
     def get_by_id(self, project_id: int):
         return project_id
 
+    async def create(self):
+        project = Project(
+            key="ps",
+            name="PurpleSchool",
+            description="Обучающая платформа"
+        )
+        self.session.add(project)
+        await self.session.commit()
+        await self.session.refresh(project)
+        logger.info(project)
 
-def get_project_repository(db: DbSessionDeps):
-    return ProjectRepository()
+
+def get_project_repository(session: DbSessionDeps):
+    return ProjectRepository(session)
 
 
 ProjectRepositoryDeps = Annotated[
     ProjectRepository,
     Depends(get_project_repository)
 ]
-
-# route
-# -> service
-#   -> repository
