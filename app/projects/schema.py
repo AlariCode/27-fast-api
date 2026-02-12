@@ -24,7 +24,7 @@ class ProjectUpdateResponse(BaseModel):
 
 class ProjectCreateRequest(BaseModel):
     key: str
-    name: str
+    name: str | None = None
     description: str | None = None
 
     model_config = {"extra": "forbid"}
@@ -39,4 +39,4 @@ class ProjectCreateRequest(BaseModel):
 
 class ProjectCreateResponse(BaseModel):
     id: int
-    name: str
+    name: str | None

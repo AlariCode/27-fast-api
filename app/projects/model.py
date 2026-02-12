@@ -11,3 +11,8 @@ class Project(Base):
         String(64), unique=True, nullable=False, index=True)
     name: Mapped[str | None] = mapped_column(String(255), nullable=True)
     description: Mapped[str | None] = mapped_column(Text, nullable=True)
+
+    def __init__(self, key: str, name: str | None = None, description: str | None = None):
+        self.key = key
+        self.name = name
+        self.description = description
