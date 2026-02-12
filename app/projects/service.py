@@ -16,8 +16,8 @@ class ProjectService:
     def __init__(self, repo: ProjectRepository):
         self.repo = repo
 
-    def get(self, project_id: int):
-        return self.repo.get_by_id(project_id)
+    async def get(self, project_id: int):
+        return await self.repo.get_by_id(project_id)
 
     async def create(self, data: ProjectCreateRequest):
         project = Project(

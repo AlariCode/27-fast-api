@@ -8,6 +8,9 @@ class ProjectPath(BaseModel):
 
 class ProjectGetResponse(BaseModel):
     id: int
+    key: str
+    name: str | None = None
+    description: str | None = None
 
 
 class ProjectUpdateRequest(BaseModel):

@@ -1,4 +1,4 @@
-from fastapi import APIRouter, Depends
+from fastapi import APIRouter, Depends, HTTPException
 
 from .service import ProjectServiceDeps
 
@@ -22,12 +22,19 @@ router = APIRouter(prefix="/v1/projects", tags=["Projects"])
     Получает проект по его id, если проекта нет, возвращает ошибку.
             """,
 )
-def get_project(
+async def get_project(
     service: ProjectServiceDeps,
     path: ProjectPath = Depends(),
 ):
-    res = service.get(path.project_id)
-    return ProjectGetResponse(id=res)
+    project = await service.get(path.project_id)
+    if project is None:
+        raise HTTPException(404, "Project not found")
+    return ProjectGetResponse(
+        id=project.id,
+        key=project.key,
+        name=project.name,
+        description=project.description
+    )
 
 
 @router.patch("/{project_id}", response_model=ProjectUpdateResponse)
