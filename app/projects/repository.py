@@ -15,7 +15,7 @@ class ProjectRepository():
     async def get_by_id(self, project_id: int):
         return await self.session.get(Project, project_id)
 
-    async def create(self, project: Project):
+    async def save(self, project: Project):
         self.session.add(project)
         await self.session.commit()
         await self.session.refresh(project)
