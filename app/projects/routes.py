@@ -37,6 +37,21 @@ async def get_project(
     )
 
 
+@router.delete(
+    "/{project_id}",
+    description="""
+    Удаляет проект по его id, если проекта нет, возвращает ошибку.
+            """,
+)
+async def delete_project(
+    service: ProjectServiceDeps,
+    path: ProjectPath = Depends(),
+):
+    success = await service.delete(path.project_id)
+    if not success:
+        raise HTTPException(404, "Project not found")
+
+
 @router.patch("/{project_id}", response_model=ProjectUpdateResponse)
 async def update_project(data: ProjectUpdateRequest, service: ProjectServiceDeps, path: ProjectPath = Depends()):
     project = await service.update(path.project_id, data)

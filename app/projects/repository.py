@@ -21,6 +21,10 @@ class ProjectRepository():
         await self.session.refresh(project)
         return project
 
+    async def delete(self, project: Project):
+        await self.session.delete(project)
+        await self.session.commit()
+
 
 def get_project_repository(session: DbSessionDeps):
     return ProjectRepository(session)
