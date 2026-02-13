@@ -21,11 +21,11 @@ class TaskService:
         self.task_repo = task_repo
         self.project_repo = project_repo
 
-    def get(self, project_id: int):
-        try:
-            return self.task_repo.get_by_id(project_id)
-        except ValueError as e:
-            logger.error("Ошибка чтения из БД %s", e, exc_info=True)
+    async def get(self, task_id: int):
+        task = await self.task_repo.get_by_id(task_id)
+        if task is None:
+            raise HTTPException(404, "Task not found")
+        return task
 
     async def create(self, data: TaskCreateRequest):
         project = await self.project_repo.get_by_id(data.project_id)

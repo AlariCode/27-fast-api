@@ -7,10 +7,14 @@ class TaskPath(BaseModel):
 
 class TaskGetResponse(BaseModel):
     id: int
+    title: str
+    description: str | None = None
+    project_id: int
+    is_completed: bool
 
 
 class TaskCreateRequest(BaseModel):
-    title: str | None = None
+    title: str
     description: str | None = None
     project_id: int
 
@@ -19,7 +23,7 @@ class TaskCreateRequest(BaseModel):
 
 class TaskCreateResponse(BaseModel):
     id: int
-    title: str | None = None
+    title: str
     description: str | None = None
     project_id: int
     is_completed: bool
