@@ -1,7 +1,11 @@
 # id, title, descripton, is_completed
-from sqlalchemy import String, Text, Boolean
-from sqlalchemy.orm import Mapped, mapped_column
+from typing import TYPE_CHECKING
+from sqlalchemy import String, Text, Boolean, ForeignKey
+from sqlalchemy.orm import Mapped, mapped_column, relationship
 from app.core.db import Base
+
+if TYPE_CHECKING:
+    from app.projects.model import Project
 
 
 class Task(Base):
@@ -11,3 +15,12 @@ class Task(Base):
     title: Mapped[str] = mapped_column(String(255), nullable=False)
     description: Mapped[str | None] = mapped_column(Text, nullable=True)
     is_completed: Mapped[bool] = mapped_column(Boolean, default=False)
+    project_id: Mapped[int] = mapped_column(
+        ForeignKey("projects.id", ondelete="CASCADE"),
+        nullable=False,
+        index=True
+    )
+    project: Mapped["Project"] = relationship(
+        "Project",
+        back_populates="tasks"
+    )
