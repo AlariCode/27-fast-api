@@ -24,3 +24,9 @@ class Task(Base):
         "Project",
         back_populates="tasks"
     )
+
+    def __init__(self, title: str, is_completed: bool, project_id: int, description: str | None = None):
+        self.title = title
+        self.description = description
+        self.is_completed = is_completed
+        self.project_id = project_id

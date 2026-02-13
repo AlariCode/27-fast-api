@@ -7,3 +7,19 @@ class TaskPath(BaseModel):
 
 class TaskGetResponse(BaseModel):
     id: int
+
+
+class TaskCreateRequest(BaseModel):
+    title: str | None = None
+    description: str | None = None
+    project_id: int
+
+    model_config = {"extra": "forbid"}
+
+
+class TaskCreateResponse(BaseModel):
+    id: int
+    title: str | None = None
+    description: str | None = None
+    project_id: int
+    is_completed: bool

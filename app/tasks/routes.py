@@ -3,7 +3,7 @@ from fastapi import APIRouter, Depends, HTTPException
 
 from .service import TaskServiceDeps
 
-from .schema import TaskGetResponse, TaskPath
+from .schema import TaskCreateRequest, TaskCreateResponse, TaskGetResponse, TaskPath
 
 
 router = APIRouter(prefix="/v1/tasks", tags=["Tasks"])
@@ -26,3 +26,9 @@ async def get_task(
         raise HTTPException(500, "Ошибка чтения ID")
     logger.info("ID: %s", res, extra={"user_id": 1})
     return TaskGetResponse(id=res)
+
+
+@router.post("/", response_model=TaskCreateResponse, status_code=201)
+async def create_task(service: TaskServiceDeps, data: TaskCreateRequest):
+    res = await service.create(data)
+    return TaskCreateResponse(id=res.id, title=res.title, description=res.description, is_completed=res.is_completed, project_id=res.project_id)
