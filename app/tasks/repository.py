@@ -22,17 +22,18 @@ class TaskRepository:
         await self.session.refresh(task)
         return task
 
-    async def search(self, offset: int = 0, limit: int = 20):
+    async def search(self, offset: int = 0, limit: int = 20, project_id: int | None = None):
         count_query = select(count()).select_from(Task)
+        query = select(Task)
+
+        if project_id is not None:
+            count_query = count_query.where(Task.project_id == project_id)
+            query = query.where(Task.project_id == project_id)
+
         total_result = await self.session.execute(count_query)
         total = total_result.scalar_one()
 
-        query = (
-            select(Task)
-            .order_by(Task.id)
-            .offset(offset)
-            .limit(limit)
-        )
+        query = query.order_by(Task.id).offset(offset).limit(limit)
         result = await self.session.execute(query)
         tasks = list(result.scalars().all())
         return tasks, total
