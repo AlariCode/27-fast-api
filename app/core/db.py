@@ -7,16 +7,9 @@ from app.core.settings import Settings
 
 settings = Settings()  # type: ignore[call-arg]
 
-engine = create_async_engine(
-    settings.database_url,
-    echo=False,
-    pool_pre_ping=True
-)
+engine = create_async_engine(settings.database_url, echo=False, pool_pre_ping=True)
 
-async_session_local = async_sessionmaker(
-    engine,
-    expire_on_commit=False
-)
+async_session_local = async_sessionmaker(engine, expire_on_commit=False)
 
 
 async def get_session() -> AsyncGenerator[AsyncSession, None]:
@@ -28,10 +21,8 @@ async def check_db(session: AsyncSession) -> int:
     result = await session.execute(select(1))
     return result.scalar_one()
 
-DbSessionDeps = Annotated[
-    AsyncSession,
-    Depends(get_session)
-]
+
+DbSessionDeps = Annotated[AsyncSession, Depends(get_session)]
 
 
 class Base(DeclarativeBase):

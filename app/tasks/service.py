@@ -1,4 +1,3 @@
-
 import logging
 from typing import Annotated
 
@@ -9,10 +8,13 @@ from app.tasks.models import Task
 from app.tasks.schema import TaskCreateRequest
 
 from .repository import TaskRepositoryDeps, TaskRepository
+
 logger = logging.getLogger(__name__)
 
 
-def get_task_service(task_repo: TaskRepositoryDeps, project_repo: ProjectRepositoryDeps):
+def get_task_service(
+    task_repo: TaskRepositoryDeps, project_repo: ProjectRepositoryDeps
+):
     return TaskService(task_repo, project_repo)
 
 
@@ -35,7 +37,4 @@ class TaskService:
         return await self.task_repo.save(task)
 
 
-TaskServiceDeps = Annotated[
-    TaskService,
-    Depends(get_task_service)
-]
+TaskServiceDeps = Annotated[TaskService, Depends(get_task_service)]

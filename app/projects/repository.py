@@ -5,10 +5,11 @@ from fastapi import Depends
 
 from app.core.db import DbSessionDeps
 from app.projects.model import Project
+
 logger = logging.getLogger(__name__)
 
 
-class ProjectRepository():
+class ProjectRepository:
     def __init__(self, session: DbSessionDeps):
         self.session = session
 
@@ -30,7 +31,4 @@ def get_project_repository(session: DbSessionDeps):
     return ProjectRepository(session)
 
 
-ProjectRepositoryDeps = Annotated[
-    ProjectRepository,
-    Depends(get_project_repository)
-]
+ProjectRepositoryDeps = Annotated[ProjectRepository, Depends(get_project_repository)]

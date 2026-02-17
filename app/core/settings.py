@@ -1,4 +1,3 @@
-
 from typing import Annotated
 from urllib.parse import urlparse
 from fastapi import Depends, Request
@@ -21,9 +20,7 @@ class AuthSettings(BaseModel):
 
 class Settings(BaseSettings):
     model_config = SettingsConfigDict(
-        env_file=".env",
-        env_file_encoding="utf-8",
-        extra="ignore"
+        env_file=".env", env_file_encoding="utf-8", extra="ignore"
     )
 
     database_url: str
@@ -49,7 +46,8 @@ class Settings(BaseSettings):
 
         if parsed.scheme not in {"postgresql", "postgresql+asyncpg"}:
             raise ValueError(
-                "database_url scheme must be postgresql or ostgresql+asyncpg")
+                "database_url scheme must be postgresql or ostgresql+asyncpg"
+            )
 
         if not parsed.hostname:
             raise ValueError("database_url must include hostname")
@@ -68,7 +66,4 @@ def get_settings(request: Request) -> Settings:
     return request.app.state.settings
 
 
-SettingsDeps = Annotated[
-    Settings,
-    Depends(get_settings)
-]
+SettingsDeps = Annotated[Settings, Depends(get_settings)]

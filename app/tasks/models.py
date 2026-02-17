@@ -16,16 +16,17 @@ class Task(Base):
     description: Mapped[str | None] = mapped_column(Text, nullable=True)
     is_completed: Mapped[bool] = mapped_column(Boolean, default=False)
     project_id: Mapped[int] = mapped_column(
-        ForeignKey("projects.id", ondelete="CASCADE"),
-        nullable=False,
-        index=True
+        ForeignKey("projects.id", ondelete="CASCADE"), nullable=False, index=True
     )
-    project: Mapped["Project"] = relationship(
-        "Project",
-        back_populates="tasks"
-    )
+    project: Mapped["Project"] = relationship("Project", back_populates="tasks")
 
-    def __init__(self, title: str, is_completed: bool, project_id: int, description: str | None = None):
+    def __init__(
+        self,
+        title: str,
+        is_completed: bool,
+        project_id: int,
+        description: str | None = None,
+    ):
         self.title = title
         self.description = description
         self.is_completed = is_completed

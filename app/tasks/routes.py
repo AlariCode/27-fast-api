@@ -1,5 +1,5 @@
 import logging
-from fastapi import APIRouter, Depends, HTTPException
+from fastapi import APIRouter, Depends
 
 from .service import TaskServiceDeps
 
@@ -22,10 +22,22 @@ async def get_task(
     path: TaskPath = Depends(),
 ):
     res = await service.get(path.task_id)
-    return TaskGetResponse(id=res.id, title=res.title, description=res.description, is_completed=res.is_completed, project_id=res.project_id)
+    return TaskGetResponse(
+        id=res.id,
+        title=res.title,
+        description=res.description,
+        is_completed=res.is_completed,
+        project_id=res.project_id,
+    )
 
 
 @router.post("/", response_model=TaskCreateResponse, status_code=201)
 async def create_task(service: TaskServiceDeps, data: TaskCreateRequest):
     res = await service.create(data)
-    return TaskCreateResponse(id=res.id, title=res.title, description=res.description, is_completed=res.is_completed, project_id=res.project_id)
+    return TaskCreateResponse(
+        id=res.id,
+        title=res.title,
+        description=res.description,
+        is_completed=res.is_completed,
+        project_id=res.project_id,
+    )
