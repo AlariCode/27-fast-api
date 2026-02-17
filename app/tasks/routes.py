@@ -3,7 +3,7 @@ from fastapi import APIRouter, Depends
 
 from .service import TaskServiceDeps
 
-from .schema import TaskCreateRequest, TaskCreateResponse, TaskGetResponse, TaskPath
+from .schema import TaskCreateRequest, TaskCreateResponse, TaskGetResponse, TaskPath, TaskSearchParams, TaskSearchResponse
 
 
 router = APIRouter(prefix="/v1/tasks", tags=["Tasks"])
@@ -28,6 +28,35 @@ async def get_task(
         description=res.description,
         is_completed=res.is_completed,
         project_id=res.project_id,
+    )
+
+
+@router.get(
+    "/",
+    response_model=TaskSearchResponse,
+    description="""
+    Поиск задач
+            """,
+)
+async def search_tasks(
+    service: TaskServiceDeps,
+    params: TaskSearchParams = Depends(),
+):
+    tasks, total = await service.search(params)
+    return TaskSearchResponse(
+        items=[
+            TaskGetResponse(
+                id=t.id,
+                title=t.title,
+                description=t.description,
+                is_completed=t.is_completed,
+                project_id=t.project_id,
+            )
+            for t in tasks
+        ],
+        total=total,
+        limit=params.limit,
+        offset=params.offset,
     )
 
 
