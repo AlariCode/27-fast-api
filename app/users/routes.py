@@ -1,7 +1,7 @@
 import logging
 from fastapi import APIRouter
 
-from app.users.schema import UserRegisterResponse, UserRegisterRequest
+from app.users.schema import UserRegisterResponse, UserRegisterRequest, UserLoginRequest, UserLoginResponse
 from app.users.service import UserServiceDeps
 
 
@@ -15,4 +15,12 @@ async def register(service: UserServiceDeps, data: UserRegisterRequest):
     return UserRegisterResponse(
         id=res.id,
         email=res.email,
+    )
+
+
+@router.post("/login", response_model=UserLoginResponse)
+async def login(service: UserServiceDeps, data: UserLoginRequest):
+    res = await service.authenticate(data)
+    return UserLoginResponse(
+        is_loggined=res
     )
