@@ -8,8 +8,8 @@ class UserLoginRequest(BaseModel):
     model_config = {"extra": "forbid"}
 
 
-class UserLoginResponse(BaseModel):
-    is_loggined: bool
+class JWTResponse(BaseModel):
+    token: str
 
 
 class UserRegisterRequest(BaseModel):
@@ -17,8 +17,3 @@ class UserRegisterRequest(BaseModel):
     password: str
 
     model_config = {"extra": "forbid"}
-
-
-class UserRegisterResponse(BaseModel):
-    id: int
-    email: str
