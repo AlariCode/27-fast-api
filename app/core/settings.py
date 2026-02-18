@@ -15,7 +15,8 @@ class DatabaseSettings(BaseModel):
 
 
 class AuthSettings(BaseModel):
-    jwt_secret: str
+    secret: str
+    expire_minutes: int
 
 
 class Settings(BaseSettings):
@@ -26,6 +27,7 @@ class Settings(BaseSettings):
     database_url: str
     database_url_sync: str
     jwt_secret: str
+    jwt_expire_minutes: int
 
     @property
     def app(self) -> AppSettings:
@@ -37,7 +39,7 @@ class Settings(BaseSettings):
 
     @property
     def auth(self) -> AuthSettings:
-        return AuthSettings(jwt_secret=self.jwt_secret)
+        return AuthSettings(secret=self.jwt_secret, expire_minutes=self.jwt_expire_minutes)
 
     @field_validator("database_url")
     @classmethod
