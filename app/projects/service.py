@@ -19,11 +19,12 @@ class ProjectService:
     async def get(self, project_id: int):
         return await self.repo.get_by_id(project_id)
 
-    async def create(self, data: ProjectCreateRequest):
-        project = Project(key=data.key, name=data.name, description=data.description)
-        return await self.repo.save(project)
+    async def create(self, data: ProjectCreateRequest, user_id: int):
+        project = Project(key=data.key, name=data.name,
+                          description=data.description)
+        return await self.repo.save(project, user_id)
 
-    async def update(self, project_id: int, data: ProjectUpdateRequest):
+    async def update(self, project_id: int, data: ProjectUpdateRequest, user_id: int):
         project = await self.repo.get_by_id(project_id)
 
         if project is None:
@@ -32,7 +33,7 @@ class ProjectService:
         patch = data.model_dump(exclude_unset=True)
         for field, value in patch.items():
             setattr(project, field, value)
-        return await self.repo.save(project)
+        return await self.repo.save(project, user_id)
 
     async def delete(self, project_id: int):
         project = await self.repo.get_by_id(project_id)

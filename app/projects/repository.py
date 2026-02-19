@@ -4,7 +4,7 @@ from typing import Annotated
 from fastapi import Depends
 
 from app.core.db import DbSessionDeps
-from app.projects.model import Project
+from app.projects.model import Project, ProjectMember
 
 logger = logging.getLogger(__name__)
 
@@ -16,8 +16,15 @@ class ProjectRepository:
     async def get_by_id(self, project_id: int):
         return await self.session.get(Project, project_id)
 
-    async def save(self, project: Project):
+    async def save(self, project: Project, user_id: int):
         self.session.add(project)
+        await self.session.flush()
+        member = ProjectMember(
+            user_id=user_id,
+            project_id=project.id,
+            role="owner"
+        )
+        self.session.add(member)
         await self.session.commit()
         await self.session.refresh(project)
         return project
@@ -31,4 +38,5 @@ def get_project_repository(session: DbSessionDeps):
     return ProjectRepository(session)
 
 
-ProjectRepositoryDeps = Annotated[ProjectRepository, Depends(get_project_repository)]
+ProjectRepositoryDeps = Annotated[ProjectRepository, Depends(
+    get_project_repository)]

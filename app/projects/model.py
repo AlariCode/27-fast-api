@@ -49,5 +49,12 @@ class ProjectMember(Base):
         "User", back_populates="project_members"
     )
     project: Mapped["Project"] = relationship(
-        "Project", back_populates="project_members"
+        "Project", back_populates="members"
     )
+
+    def __init__(
+        self, user_id: int, project_id: int, role: str
+    ):
+        self.user_id = user_id
+        self.project_id = project_id
+        self.role = role
