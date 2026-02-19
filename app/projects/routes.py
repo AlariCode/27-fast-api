@@ -31,8 +31,7 @@ async def get_project(
     current_user: CurrentUserDeps,
     path: ProjectPath = Depends(),
 ):
-    logger.info(current_user.email)
-    project = await service.get(path.project_id)
+    project = await service.get(path.project_id, current_user.id)
     if project is None:
         raise HTTPException(404, "Project not found")
     return ProjectGetResponse(

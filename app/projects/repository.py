@@ -2,6 +2,7 @@ import logging
 from typing import Annotated
 
 from fastapi import Depends
+from sqlalchemy import select
 
 from app.core.db import DbSessionDeps
 from app.projects.model import Project, ProjectMember
@@ -15,6 +16,15 @@ class ProjectRepository:
 
     async def get_by_id(self, project_id: int):
         return await self.session.get(Project, project_id)
+
+    async def get_member(self, project_id: int, user_id: int) -> ProjectMember | None:
+        result = await self.session.execute(
+            select(ProjectMember).where(
+                ProjectMember.project_id == project_id,
+                ProjectMember.user_id == user_id,
+            )
+        )
+        return result.scalar_one_or_none()
 
     async def save(self, project: Project, user_id: int):
         self.session.add(project)
