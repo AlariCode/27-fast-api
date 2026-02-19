@@ -1,4 +1,7 @@
+import logging
 from fastapi import APIRouter, Depends, HTTPException
+
+from app.users.current_user import CurrentUserDeps
 
 from .service import ProjectServiceDeps
 
@@ -13,6 +16,7 @@ from .schema import (
 
 
 router = APIRouter(prefix="/v1/projects", tags=["Projects"])
+logger = logging.getLogger(__name__)
 
 
 @router.get(
@@ -24,8 +28,10 @@ router = APIRouter(prefix="/v1/projects", tags=["Projects"])
 )
 async def get_project(
     service: ProjectServiceDeps,
+    current_user: CurrentUserDeps,
     path: ProjectPath = Depends(),
 ):
+    logger.info(current_user.email)
     project = await service.get(path.project_id)
     if project is None:
         raise HTTPException(404, "Project not found")
