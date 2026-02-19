@@ -1,4 +1,5 @@
 from fastapi import FastAPI
+from app.core.middleware import TimingMiddleware
 from app.core.settings import Settings
 from app.projects.routes import router as project_router
 from app.tasks.routes import router as task_router
@@ -23,6 +24,7 @@ def create_app() -> FastAPI:
     new_app.include_router(project_router)
     new_app.include_router(task_router)
     new_app.include_router(user_router)
+    new_app.add_middleware(TimingMiddleware)
     return new_app
 
 
